@@ -1,31 +1,19 @@
-// `data` is the data you encrypted and passed into `evervault.run` from your server. The Function 
-// automatically decrypts the data and maintains its structure so you can treat event exactly as 
-// you did when you passed it into `evervault.run`.
-// exports.handler = async (data, context) => {
-//     // Check if the data sent into the Function included the `name` key
-//     if (data.name && typeof data.name === "string") {
-//         console.debug(`A name of length ${data.name.length} has arrived into the Function.`);
-    
-//         // Process the decrypted name value, and re-encrypt the original name using the encrypt function available in the context parameter.
-//         return {
-//             message: `Hello from a Function! It seems you have ${data.name.length} letters in your name`,
-//             name: context.encrypt(data.name),
-//         };
-//     } else {
-//         console.debug('An empty name has arrived into the Function.');
-    
-//         return {
-//             message: 'Hello from a Function! Send an encrypted `name` parameter to show Function decryption in action',
-//         };
-//     }
-// };
+exports.handler = async (data, context) => {
+    // Check if both name and age are provided and valid
+    if (data.name && typeof data.name === "string" && data.age && typeof data.age === "number") {
+        console.debug(`A name of length ${data.name.length} and age ${data.age} have arrived into the Function.`);
 
+        // Process the decrypted name and age, and re-encrypt both using the encrypt function
+        return {
+            message: `Hello from a Function! Your name has ${data.name.length} letters, and you are ${data.age} years old.`,
+            name: context.encrypt(data.name),
+            age: context.encrypt(data.age)
+        };
+    } else {
+        console.debug('Missing or invalid name or age in the Function input.');
 
-module.exports = async function handler(request) {
-  const { name, age } = request.body;
-
-  return {
-    message: `Hi ${name}, you are ${age} years old!`,
-    success: true
-  };
+        return {
+            message: 'Hello from a Function! Send encrypted `name` (string) and `age` (number) parameters to show Function decryption in action.'
+        };
+    }
 };
