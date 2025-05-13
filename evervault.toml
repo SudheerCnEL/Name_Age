@@ -1,2 +1,4 @@
-[build]
-entrypoint = "index.js"
+[function]
+name = "Name_Age"
+language = "node@18"
+handler = "index.handler"
